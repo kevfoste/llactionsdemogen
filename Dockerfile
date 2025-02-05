@@ -1,11 +1,21 @@
+# Use the latest Ubuntu image
 FROM ubuntu:latest
 
-RUN apt-get update && apt-get install -y \
-    python3.10 \
-    python3-pip \
-    git
+# Set non-interactive mode for apt-get to prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN pip3 install PyYAML
+# Update package lists and install Python3, pip, and PyYAML
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    pip3 install --no-cache-dir pyyaml && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory
+WORKDIR /app
+
+# Default command (optional)
+CMD ["python3"]
+
 
 COPY feed.py /usr/bin/feed.py
 
